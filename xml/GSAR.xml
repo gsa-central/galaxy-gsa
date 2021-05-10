@@ -1,0 +1,181 @@
+<tool id="GSAR" name="Gene Set Analysis in R" version="0.1.0">
+    <description>A set of multivariate statistical tests for self-contained gene set analysis in two conditions</description>
+    <requirements>
+        <requirement type="package" version="1.24.0">bioconductor-GSAR</requirement>
+        <requirement type="package" version="1.52.1">bioconductor-GSEABase</requirement>
+        <requirement type="package" version="1.20.3">r-getopt</requirement>
+        
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '$__tool_directory__/GSAR.R' 
+        --expr_file '$expression_data_file' 
+        --geneSet_file '$geneSet'
+        --design_file '$desigin' 
+        --min_size '$adv.min_size'
+        --max_size '$adv.max_size'
+        --test_method '$method'
+        --nperm_number '$adv.perm_num'
+        --threshold_value '$MST.threshold'
+        --cor_method '$MST.cor_method'
+        --GSAR_output_p_value '$GSAR_p_value_for_the_geneSet'
+        --GSAR_output_plot '$GSAR_Significant_pathway_plot'
+    ]]></command>
+    <inputs>
+        <param name="expression_data_file" type="data" format="CSV" label="Expression data file" help="An CSV file that is a matrix of expression values where rows correspond to genes (symbol ID) and columns correspond to samples."/>
+        <param name="desigin" type="data" format="CSV" label="Design" help="An CSV file that has two columns correspond to samples, one is 'group' which sets 1 for group1 and 2 for group2, the other is 'label' to set group1 and group2 name/label."/>
+        <param name="geneSet" type="data" format="rdata" label="Gene Set" help="An rdata file included geneSetCollection object 'geneSet' as name."/>
+        <param name="method" type="select" label="Method" help="Statistical method to use for testing the gene sets.">
+            <option value="GSNCAtest" selected="true">Gene sets net correlations analysis</option>
+            <option value="WWtest">Wald-Wolfowitz test</option>
+            <option value="KStest">Kolmogorov-Smirnov test</option>
+            <option value="MDtest">Mean Deviation test</option>
+            <option value="RKStest">Radial Kolmogorov-Smirnov test</option>
+            <option value="RMDtest">Radial Mean Deviation test</option>
+        </param>
+        <section name="adv" title="Advance options">
+            <param name="min_size" type="integer" value="10" min="5" label="Min Size for the GeneSet" help="The minimum allowed gene set size. Default value is 10." />
+            <param name="max_size" type="integer" value="500" label="Max Size for the GeneSet" help="The maximum allowed gene set size. Default value is 500." />
+            <param name="perm_num" type="integer" value="1000" min="100" label="Permutations number" help="Number of permutations used to estimate the null distribution of the test statistic. Default value 1000 is used. The minumum value is 100." />
+        </section>
+        
+        <section name="MST" title="Option for plot minimum spanning trees" >
+            <param name="threshold" type="float" value="0.05" min="0.0001" max="1" label="Threshold value" help="Threshold value to define significant geneSet for plot minimum spanning trees. Default as 0.05." />
+            <param name="cor_method" type="select" label="Correlation coefficient statistic" help="Correlation coefficient is to be computed in plot minimum spanning trees for a pathway in two conditions. Possible values are 'pearson' (default), 'spearman' and 'kendall'. Default value is 'pearson'. " >
+                <option value="pearson" selected="true">pearson</option>
+                <option value="spearman">spearman</option>
+                <option value="kendall">kendall</option>
+            </param>
+        </section> 
+    </inputs>
+    <outputs>
+        <data name="GSAR_p_value_for_the_geneSet" format="CSV" label="GSAR_p_value_for_the_geneSet" />
+        <data name="GSAR_Significant_pathway_plot" format="pdf" label="GSAR_Significant_pathway_plot" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="expression_data_file" value="GSAR_input_p53DataSet.csv" ftype="csv" />    
+            <param name="desigin" value="GSAR_design.csv" ftype="csv" />
+            <param name="method" value="GSNCAtest" />
+            <section name="adv">
+                <param name="min_size" value="10" />
+                <param name="max_size" value="500" />
+                <param name="perm_num" value="1000"/>
+            </section>
+            <section name="MST">
+                <param name="threshold" value="0.05" />
+                <param name="cor_method" value="pearson" />
+            </section> 
+            <output name="GSAR_p_value_for_the_geneSet" file="GSAR_p_value_for_the_geneSet.csv" ftype="csv" />
+            <output name="GSAR_Significant_pathway_plot" file="GSAR_Significant_pathway_plot.pdf" ftype="pdf" />
+        </test>
+    </tests>
+    <help><![CDATA[
+    
+        
+.. class:: infomark 
+
+**What it does**
+    
+    **Gene Set Analysis in R** is an R package GSAR which provides a set of multivariate statistical tests for self-contained gene set analysis (GSA). 
+    GSAR consists of two-sample multivariate nonparametric statistical methods testing a null hypothesis against specific alternative hypotheses, 
+    such as differences in mean (shift), variance (scale) or correlation structure. It also offers a graphical visualization tool for the correlation 
+    networks obtained from expression data to examine the change in the net correlation structure of a gene set between two conditions based on the
+    minimum spanning trees.
+
+--------- 
+
+=========
+**Input**
+=========
+
+
+**Gene expression data** 
+
+The input data is an CSV file, which included a matrix of expression values where rows correspond to genes and columns correspond to samples.
+Recommend gene id is Symbol ID.
+
+
+**Design**
+
+An CSV file that has two columns correspond to samples, one is `'group'` which sets 1 for group1 and 2 for group2, the other is `'label'` to set group1 and group2 name/label.
+
+example
+
+    ======= ======= =========
+    sample  group   label
+    ======= ======= =========
+    WT1         1   control
+    WT2         1   control
+    WT3         1   control
+    ...       ...   ...
+    MUT31       2   test
+    MUT32       2   test
+    MUT33       2   test
+    ======= ======= =========
+    
+
+**Gene Sets**
+
+Gene Sets is an rdata file which included object `geneSet` that is geneSetCollection built by `GSEABase` of bioconductor package. You can use 
+GeneSet from Msigdb/KEGG to get this file. You must pay attention to set the gene id type is the same of Gene expression data.
+
+
+**Method** 
+
+Statistical method to use for testing the gene sets. Must be one of Gene sets net correlations analysis, Wald-Wolfowitz test, Kolmogorov-Smirnov test, Mean Deviation test, Radial Kolmogorov-Smirnov test and Radial Mean Deviation test.
+
+
+
+**Min Size for the GeneSet**
+
+The minimum allowed gene set size. Default value is 10.
+
+
+**Max Size for the GeneSet**
+
+The maximum allowed gene set size. Default value is 500.
+
+**Permutations number**
+
+Number of permutations used to estimate the null distribution of the test statistic. Default value 1000 is used. The minumum value is 100.
+
+**Threshold value**
+
+Threshold value to define significant geneSet for plot minimum spanning trees. Default as 0.05.
+
+**Correlation coefficient statistic**
+
+Correlation coefficient is to be computed in plot minimum spanning trees for a pathway in two conditions. Possible values are 'pearson' (default), 'spearman' and 'kendall'. Default value is 'pearson'. 
+
+--------- 
+
+==========
+**Output**
+==========
+
+
+**1. An CSV file contained P-value of all geneSet**
+
+
+Example
+
+    ========= ========== 
+    geneSet     p_value 
+    ========= ========== 
+    pathway_1   0.007
+    pathway_2   0.008
+    pathway_3   0.009
+    pathway_4   0.010
+    ...         ...
+    pathway_n   0.999
+    ========= ========== 
+
+ 
+**2. Plot minimum spanning trees for significant geneSet in two conditions**
+
+    ]]></help>
+    
+    <citations>
+        <citation type="doi">10.1186/s12859-017-1482-6</citation>
+    </citations>
+</tool>
