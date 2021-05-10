@@ -1,5 +1,5 @@
-<tool id="Chipenrich" name="Chipenrich" version="0.1.0" python_template_version="3.5">
-    <description>Gene Set Enrichment for ChiP-Seq Peak Data</description>
+<tool id="Chipenrich" name="ChIP-Enrich" version="0.1.0" python_template_version="3.5">
+    <description>Gene set enrichment for ChIP-Seq peak data</description>
     <requirements>
         <requirement type="package" version="1.20.3">r-getopt</requirement>
         <requirement type="package" version="2.14.0">bioconductor-chipenrich</requirement>
@@ -22,7 +22,7 @@
         
     ]]></command>
     <inputs>
-        <param name="peaks" type="data" format="csv" label="Peaks" help="A CSV file contains table that the first 3 columns correspond to 'chr', 'start' and 'end'. " />
+        <param name="peaks" type="data" format="csv" label="Peaks" help="A CSV file whose three first columns correspond to 'chr', 'start' and 'end'. " />
         <conditional name="geneset_option">
             <param name="genome" type="select" label="Genome" help="" >
                 <option value="hg19" selected="true">Human(hg19)</option>
@@ -37,32 +37,32 @@
                 <option value="danRer10">D.Zebrafish(danRer10)</option>
             </param>
             <when value="hg19">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
 
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
-                    <option value="biocarta_pathway">Biocarta Pathway</option>
-                    <option value="kegg_pathway">KEGG Pathway</option>
-                    <option value="panther_pathway">Panter Pathway</option>
-                    <option value="pfam">pFAM</option>
+                    <option value="biocarta_pathway">Biocarta Pathways</option>
+                    <option value="kegg_pathway">KEGG Pathways</option>
+                    <option value="panther_pathway">PANTHER Pathways</option>
+                    <option value="pfam">PFAM</option>
                     <option value="reactome">Reactome</option>
                     
                     <option value="mesh">MeSH</option>
                     
-                    <option value="hallmark">Hallmark</option>
-                    <option value="immunologic">Immunologic</option>
-                    <option value="oncogenic">Oncogenic</option>
+                    <option value="hallmark">Hallmark gene sets</option>
+                    <option value="immunologic">Immunologic signature gene sets</option>
+                    <option value="oncogenic">Oncogenic signature gene sets</option>
 
-                    <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
-                    <option value="drug_bank">Drug Bank</option>
+                    <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
+                    <option value="drug_bank">DrugBank</option>
                     <option value="microrna">MicroRNA</option>
                     <option value="transcription_factors">Transcription Factors</option>
 
-                    <option value="protein_interaction_biogrid">Protein Interaction BioGRID</option>
+                    <option value="protein_interaction_biogrid">Protein Interactions (BioGRID)</option>
 
-                    <option value="metabolite">Metabolite</option>
-                    <option value="cytoband">Cytoband</option>
+                    <option value="metabolite">Metabolites</option>
+                    <option value="cytoband">Cytobands</option>
                 </param>
             </when>
             <when value="hg38">
@@ -71,148 +71,148 @@
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
-                    <option value="biocarta_pathway">Biocarta Pathway</option>
-                    <option value="kegg_pathway">KEGG Pathway</option>
-                    <option value="panther_pathway">Panter Pathway</option>
-                    <option value="pfam">pFAM</option>
+                    <option value="biocarta_pathway">Biocarta Pathways</option>
+                    <option value="kegg_pathway">KEGG Pathways</option>
+                    <option value="panther_pathway">PANTHER Pathways</option>
+                    <option value="pfam">PFAM</option>
                     <option value="reactome">Reactome</option>
                     
                     <option value="mesh">MeSH</option>
                     
-                    <option value="hallmark">Hallmark</option>
-                    <option value="immunologic">Immunologic</option>
-                    <option value="oncogenic">Oncogenic</option>
+                    <option value="hallmark">Hallmark gene sets</option>
+                    <option value="immunologic">Immunologic signature gene sets</option>
+                    <option value="oncogenic">Oncogenic signature gene sets</option>
 
-                    <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
-                    <option value="drug_bank">Drug Bank</option>
+                    <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
+                    <option value="drug_bank">DrugBank</option>
                     <option value="microrna">MicroRNA</option>
                     <option value="transcription_factors">Transcription Factors</option>
 
-                    <option value="protein_interaction_biogrid">Protein Interaction BioGRID</option>
+                    <option value="protein_interaction_biogrid">Protein Interactions (BioGRID)</option>
 
-                    <option value="metabolite">Metabolite</option>
-                    <option value="cytoband">Cytoband</option>
+                    <option value="metabolite">Metabolites</option>
+                    <option value="cytoband">Cytobands</option>
                 </param>
             </when>
             <when value="mm10">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
                         <option value="GOBP" selected="true">GO Biological Process</option>
                         <option value="GOCC" selected="true">GO Cellular Component</option>
                         <option value="GOMF" selected="true">GO Molecular Function</option>
-                        <option value="biocarta_pathway">Biocarta Pathway</option>
-                        <option value="kegg_pathway">KEGG Pathway</option>
-                        <option value="panther_pathway">Panter Pathway</option>
-                        <option value="pfam">pFAM</option>
+                        <option value="biocarta_pathway">Biocarta Pathways</option>
+                        <option value="kegg_pathway">KEGG Pathways</option>
+                        <option value="panther_pathway">PANTHER Pathways</option>
+                        <option value="pfam">PFAM</option>
                         <option value="reactome">Reactome</option>
 
                         <option value="mesh">MeSH</option>
 
-                        <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
-                        <option value="drug_bank">Drug Bank</option>
+                        <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
+                        <option value="drug_bank">DrugBank</option>
                         <option value="microrna">MicroRNA</option>
                         <option value="transcription_factors">Transcription Factors</option>
 
-                        <option value="protein_interaction_biogrid">Protein Interaction BioGRID</option>
+                        <option value="protein_interaction_biogrid">Protein Interactions (BioGRID)</option>
 
-                        <option value="metabolite">Metabolite</option>    
+                        <option value="metabolite">Metabolites</option>    
                 </param>                
             </when>  
             <when value="mm9">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
 
 
                         <option value="GOBP" selected="true">GO Biological Process</option>
                         <option value="GOCC" selected="true">GO Cellular Component</option>
                         <option value="GOMF" selected="true">GO Molecular Function</option>
-                        <option value="biocarta_pathway">Biocarta Pathway</option>
-                        <option value="kegg_pathway">KEGG Pathway</option>
-                        <option value="panther_pathway">Panter Pathway</option>
-                        <option value="pfam">pFAM</option>
+                        <option value="biocarta_pathway">Biocarta Pathways</option>
+                        <option value="kegg_pathway">KEGG Pathways</option>
+                        <option value="panther_pathway">PANTHER Pathways</option>
+                        <option value="pfam">PFAM</option>
                         <option value="reactome">Reactome</option>
 
                         <option value="mesh">MeSH</option>
 
-                        <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
-                        <option value="drug_bank">Drug Bank</option>
+                        <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
+                        <option value="drug_bank">DrugBank</option>
                         <option value="microrna">MicroRNA</option>
                         <option value="transcription_factors">Transcription Factors</option>
 
-                        <option value="protein_interaction_biogrid">Protein Interaction BioGRID</option>
+                        <option value="protein_interaction_biogrid">Protein Interactions (BioGRID)</option>
 
-                        <option value="metabolite">Metabolite</option>    
+                        <option value="metabolite">Metabolites</option>
                 </param>                
             </when>
             <when value="rn4">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
 
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
-                    <option value="biocarta_pathway">Biocarta Pathway</option>
-                    <option value="kegg_pathway">KEGG Pathway</option>
-                    <option value="panther_pathway">Panter Pathway</option>
-                    <option value="pfam">pFAM</option>
+                    <option value="biocarta_pathway">Biocarta Pathways</option>
+                    <option value="kegg_pathway">KEGG Pathways</option>
+                    <option value="panther_pathway">PANTHER Pathways</option>
+                    <option value="pfam">PFAM</option>
                     <option value="reactome">Reactome</option>
 
                     <option value="mesh">MeSH</option>
 
-                    <option value="drug_bank">Drug Bank</option>
+                    <option value="drug_bank">DrugBank</option>
                     <option value="microrna">MicroRNA</option>
                     <option value="transcription_factors">Transcription Factors</option>
 
-                    <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
+                    <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
 
-                    <option value="metabolite">Metabolite</option>
+                    <option value="metabolite">Metabolites</option>
                 </param>
             </when>  
             <when value="rn5">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
 
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
-                    <option value="biocarta_pathway">Biocarta Pathway</option>
-                    <option value="kegg_pathway">KEGG Pathway</option>
-                    <option value="panther_pathway">Panter Pathway</option>
-                    <option value="pfam">pFAM</option>
+                    <option value="biocarta_pathway">Biocarta Pathways</option>
+                    <option value="kegg_pathway">KEGG Pathways</option>
+                    <option value="panther_pathway">PANTHER Pathways</option>
+                    <option value="pfam">PFAM</option>
                     <option value="reactome">Reactome</option>
 
                     <option value="mesh">MeSH</option>
 
-                    <option value="drug_bank">Drug Bank</option>
+                    <option value="drug_bank">DrugBank</option>
                     <option value="microrna">MicroRNA</option>
                     <option value="transcription_factors">Transcription Factors</option>
 
-                    <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
+                    <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
 
-                    <option value="metabolite">Metabolite</option>
+                    <option value="metabolite">Metabolites</option>
                 </param>
             </when> 
             <when value="rn6">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
 
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
-                    <option value="biocarta_pathway">Biocarta Pathway</option>
-                    <option value="kegg_pathway">KEGG Pathway</option>
-                    <option value="panther_pathway">Panter Pathway</option>
-                    <option value="pfam">pFAM</option>
+                    <option value="biocarta_pathway">Biocarta Pathways</option>
+                    <option value="kegg_pathway">KEGG Pathways</option>
+                    <option value="panther_pathway">PANTHER Pathways</option>
+                    <option value="pfam">PFAM</option>
                     <option value="reactome">Reactome</option>
 
                     <option value="mesh">MeSH</option>
 
-                    <option value="drug_bank">Drug Bank</option>
+                    <option value="drug_bank">DrugBank</option>
                     <option value="microrna">MicroRNA</option>
                     <option value="transcription_factors">Transcription Factors</option>
 
-                    <option value="ctd">Comparative Toxicogenomics Database(CTD)</option>
+                    <option value="ctd">Comparative Toxicogenomics Database (CTD)</option>
 
-                    <option value="metabolite">Metabolite</option>
+                    <option value="metabolite">Metabolites</option>
                 </param>
             </when> 
              <when value="dm3">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
@@ -220,7 +220,7 @@
                 </param>
             </when>     
             <when value="dm6">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
@@ -228,7 +228,7 @@
                 </param>
             </when>
             <when value="danRer10">
-                <param name="genesets" type="select" label="GeneSets" help="Selcet gene sets to test." multiple="true" display="checkboxes">
+                <param name="genesets" type="select" label="GeneSets" help="Select gene sets to test." multiple="true" display="checkboxes">
                     <option value="GOBP" selected="true">GO Biological Process</option>
                     <option value="GOCC" selected="true">GO Cellular Component</option>
                     <option value="GOMF" selected="true">GO Molecular Function</option>
@@ -237,13 +237,12 @@
             </when>           
         </conditional>
 
-        <param name="method" type="select" label="Method" display="radio" help="See details in help." >
+        <param name="method" type="select" label="Method" display="radio" help="See details in the help section." >
             <option value="chipenrich" selected="true">Chip-Enrich</option>
             <option value="polyenrich" >Poly-Enrich</option>
             <option value="hybridenrich">Hybrid-Enrich</option>
             <option value="broadenrich">Broad-Enrich</option>
         </param>
-        
         
         <conditional name="peaks_option">
             <param name="peaks_type" type="select" label="Which Peaks to use" display="radio" help="" >
@@ -261,12 +260,12 @@
             </when>
             <when value="genedistal">
                 <param name="locusdefs" type="select"  label="Gene distal regulation choices" display="radio" help="" >
-                    <option value="1kb_outstie"> &gt; 1kb (only use peaks greater than 5kb of a transcription start site)</option>
+                    <option value="1kb_outstie"> &gt; 1kb (only use peaks greater than 1kb of a transcription start site)</option>
                     <option value="5kb_outstie"> &gt; 5kb (only use peaks greater than 5kb of a transcription start site)</option>
-                    <option value="10kb_outstie"> &gt; 10kb (only use peaks greater than 5kb of a transcription start site)</option>
-                    <option value="1kb_outstie_upstream"> &gt; 1kb upstream (only use peaks greater than 5kb upstream of a transcription start site)</option>
+                    <option value="10kb_outstie"> &gt; 10kb (only use peaks greater than 10kb of a transcription start site)</option>
+                    <option value="1kb_outstie_upstream"> &gt; 1kb upstream (only use peaks greater than 1kb upstream of a transcription start site)</option>
                     <option value="5kb_outstie_upstream"> &gt; 5kb upstream (only use peaks greater than 5kb upstream of a transcription start site)</option>
-                    <option value="10kb_outstie_upstream"> &gt; 10kb upstream (only use peaks greater than 5kb upstream of a transcription start site)</option>
+                    <option value="10kb_outstie_upstream"> &gt; 10kb upstream (only use peaks greater than 10kb upstream of a transcription start site)</option>
                 </param>
             </when>
             <when value="regulation">
@@ -284,10 +283,11 @@
         </conditional>    
         
         <param name="threshold" type="integer" value="1" min="1" label="Peak Threshold Number" help="Number of peaks a gene must have assigned to it before getting coded as 1 (having a peak) in the test. Typically, this should be set to 1." />
-        <section name="adv" title="Advance options">
+
+        <section name="adv" title="Advanced options">
             <param name="minSize" type="integer" value="15" min="1" label="Minimum gene set size" help="" />
             <param name="maxSize" type="integer" value="2000" min="1" label="Maxnimum gene set size" help="" />
-            <param name="randomization" type="select" label="Randomization" help="See details in help.">
+            <param name="randomization" type="select" label="Randomization" help="See details in the help section.">
                 <option value="NULL">No randomizations</option>
                 <option value="complete">complete</option>
                 <option value="bylength">by length</option>
@@ -296,11 +296,13 @@
         </section>
         
     </inputs>
+
     <outputs>
         <data name="output_peaks" format="csv" label="peaks_result" />
         <data name="enrich_result" format="csv" label="enrich_result" />
         <data name="peaks_per_gene" format="csv" label="peaks_per_gene" />
     </outputs>
+
     <tests>
         <test>
             <param name="peaks" value="peaks.csv" ftype="csv" />
@@ -324,16 +326,17 @@
             <output name="peaks_per_gene" file="peaks_per_gene.csv" ftype="csv" />
         </test>
     </tests>
+
     <help><![CDATA[
 
     .. class:: infomark
     
     **What it does**
     
-    Chipenrich tool has four method to test Chip-seq peak data for enrichment of biological pathways, Gene Ontology terms, and 
-    other types of gene sets. Using a CSV file contains table that the first 3 columns correspond to 'chr', 'start' and 'end',
-    Chipenrich tool assigns peaks to genes based on a chosen "locus definition". The "locus" of a gene is the region from 
-    wich the gene is predicted to be regulated. 
+    Chip-Enrich includes four methods to test Chip-seq peak data for enrichment of biological pathways, Gene Ontology terms, and 
+    other types of gene sets. Using a CSV file whose first three columns correspond to 'chr', 'start' and 'end',
+    Chip-Enrich assigns peaks to genes based on a chosen "locus definition". The "locus" of a gene is the region from 
+    which the gene is predicted to be regulated. 
     
 -------
 
@@ -341,13 +344,12 @@
 **Input**
 =========
 
-
     **Peaks**
     
-    A CSV file contains table that the first 3 columns correspond to 'chr', 'start' and 'end'. For example:
+    The CSV file contains a table whose first three columns correspond to 'chr', 'start' and 'end'. For example:
     
     ====== ========== ===========
-    chrom  start       end
+    chr     start       end
     ====== ========== ===========
     chr1   156186314  156186469
     chr1   10490456   10490550
@@ -357,8 +359,7 @@
     chr1   47779789   47779907
     ====== ========== ===========
 
-
-**method**
+**Method**
 
     The following guidelines are intended to help select an enrichment method:
 
@@ -385,20 +386,21 @@
 **Output**
 ==========
     
-    **peaks**
+    **Peaks**
     
-    A CSV file contains peak assignments to genes. Peaks which do not overlap a gene locus are not included. Each peak that was assigned to a gene is listed, along with the peak midpoint or peak interval coordinates (depending on which was used), the gene to which the peak was assigned, the locus start and end position of the gene, and the distance from the peak to the TSS.
+    A CSV file containing peak assignments to genes. Peaks which do not overlap a gene locus are not included. Each peak that was assigned to a gene is listed, along with the peak midpoint or peak interval coordinates (depending on which was used), the gene to which the peak was assigned, the locus start and end position of the gene, and the distance from the peak to the TSS.
     
-    **preks per gene**
+    **Peaks per gene**
     
-    A CSV file contains the count of peaks per gene. 
+    A CSV file containing the count of peaks per gene. 
     
-    **enrich result**
+    **Enrichment results**
     
-    A CSV file contains the results from performing the gene set enrichment test on each geneset that was requested. 
+    A CSV file containing the results from performing the gene set enrichment test on each gene set that was considered. 
     
     ]]></help>
     <citations>
         <citation type="doi">10.1093/nar/gku463</citation>
+        <citation type="doi">10.1093/bioinformatics/btu444</citation>
     </citations>
 </tool>

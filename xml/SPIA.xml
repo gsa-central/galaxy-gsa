@@ -1,11 +1,12 @@
-<tool id="SPIA" name="Signaling Pathway Impact Analysis (SPIA)" version="0.1.0" >
-    <description>SPIA based on over-representation and signaling perturbations accumulation to analyze KEGG signaling pathways.</description>
+<tool id="SPIA" name="SPIA (Signaling Pathway Impact Analysis)" version="0.1.0" >
+    <description>A method based on over-representation and signaling perturbation accumulation to analyze KEGG signaling pathways.</description>
+
     <requirements>
         <requirement type="package" version="1.20.3">r-getopt</requirement>
         <requirement type="package" version="2.42.0">bioconductor-SPIA</requirement>
         <requirement type="package" version="2.14.0">bioconductor-chipenrich.data</requirement>
-        
     </requirements>
+
     <command detect_errors="exit_code"><![CDATA[
         Rscript '$__tool_directory__/SPIA.R'
         -D '$input_data' 
@@ -26,42 +27,45 @@
         #end if
         
     ]]></command>
+
     <inputs>
-        <param type="data" name="input_data" format="csv" multiple="false" label="Input data" help="An CSV file included columns ENTREZ, logFC, and adj.P.Val"/>
-        <param type="text" name="organism" value="hsa" label="Organism" help="A three letter character designating the organism. Deault as hsa(Human). See a full list at https://www.genome.jp/kegg/catalog/org_list.html" />
+        <param type="data" name="input_data" format="csv" multiple="false" label="Input data" help="A csv file including the columns ENTREZ, logFC, and adj.P.Val"/>
+        <param type="text" name="organism" value="hsa" label="Organism" help="A three letter character designating the organism. Default is `hsa` (human). See a full list at https://www.genome.jp/kegg/catalog/org_list.html" />
         
         <section name="adv" title="Advanced Options" expanded="false">
-            <param type="float" name="P_value_threshold" label="P value threshould to select DEgenes" value="0.05" min="0.00" max="1.00" help="Set a threshold value to define different expression genes"/>
-                
+            <param type="float" name="P_value_threshold" label="P value threshold to select DEgenes" value="0.05" min="0.00" max="1.00" help="Set a threshold value to define differentially expressed genes"/>
             <param type="integer" name="Number_bootstrap" value="2000" min="100" label="Bootstrap iterations" help="Number of bootstrap iterations used to compute the P PERT value. Should be larger than 100. A recommended value is 2000." />
-            <param type="select" name="method_combine_pvalue" label="Combine P value method" help="Method used to combine the two types of p-values. If set to 'fisher' it will use Fisher's method. If set to 'norminv' it will use the normal inversion method.">
+            <param type="select" name="method_combine_pvalue" label="Method to combine P values" help="Method used to combine the two types of p-values. If set to 'fisher' it will use Fisher's method. If set to 'norminv' it will use the normal inversion method.">
                 <option value="fisher" selected="True">fisher</option>
                 <option value="norminv">norminv</option>
             </param>
-            <param type="boolean" name="plot_perturbation" truevalue="True" falsevalue="False" checked="False" label="Plot" help=" if plot argument set Yes,plot the gene perturbation accumulation vs log2 fold change for every gene on each pathway. default as No." />    
-            <param type="text" name="pathwayId" value="" label="Pathway IDs -- default as NULL and analysis all pathway. " help="Special one or more pathway to analysis, Input pathway id at here. for example:   03018,  03320 ."/>
+            <param type="boolean" name="plot_perturbation" truevalue="True" falsevalue="False" checked="False" label="Plot perturbation" help="If set to Yes, plot the gene perturbation accumulation vs log2 fold change for every gene on each pathway. Default is No." />    
+            <param type="text" name="pathwayId" value="" label="Pathway IDs -- default as NULL and analysis all pathway. " help="Special one or more pathway to analysis, input pathway ID at here. For example: 03018, 03320."/>
         </section>
         
     </inputs>
+
     <outputs>
         <data name="sigP_output" format="csv" label="SPIA_enrich_kegg" />
         <data format="pdf" name="SPIA_Perturbation_Plots" label="SPIA_Perturbation_Plots">
             <filter>adv['plot_perturbation'] == True</filter>
         </data>
     </outputs>
+
     <tests>
         <test>
             <param name="input_data" value="SPIA_input.csv" ftype="csv" />
             <output  name="sigP_output" file="x.csv" ftype="csv" />
         </test>
     </tests>
+
     <help><![CDATA[
         
     .. class:: infomark
     
     **What it does**
     
-    Signaling pathway impact analysis (SPIA) combines the evidence obtained from the 
+    SPIA (Signaling pathway impact analysis) combines the evidence obtained from the 
     classical enrichment analysis with a novel type of evidence, which measures the actual
     perturbation on a given pathway under a given condition.
     
@@ -69,7 +73,7 @@
     
     Then we can calculate a global pathway significance P-value, which combines the enrichment and perturbation P-values.
     
-    SPIA tool analyze KEGG signaling pathways.
+    SPIA tool analyzes KEGG signaling pathways.
 
 -------
 
@@ -77,15 +81,13 @@
 **Input**
 =========
 
-
-basic options
+Basic options
 --------------
 
 **Input data** 
 
-The input data is an CSV file, which included columns `ENTREZ`, `logFC` and `adj.P.Val`.
-This file contained all genes of your data with column `ENTREZ` which is genes entrez ID.
-
+The input data is a csv file, which includes the columns `ENTREZ`, `logFC` and `adj.P.Val`.
+This file contains all genes of your dataset.
 
     ====== ========== ======= ==========  ========= ==== ========
      logFC  AveExpr     t       P.Value   adj.P.Val B     ENTREZ
@@ -98,40 +100,34 @@ This file contained all genes of your data with column `ENTREZ` which is genes e
     1.43    5.33        10.5    4.27e-10  2.42e- 6  12.8  23645
     ====== ========== ======= ==========  ========= ==== ========
 
-
-
 **Organism**
 
-It is organism for your data. A three letter character designating the organism. deault as hsa(Human). See a full list at https://www.genome.jp/kegg/catalog/org_list.html.
+A three letter word designating the organism of your data. Default is `hsa` (Human). See a full list of options at https://www.genome.jp/kegg/catalog/org_list.html.
 
 ------
-
 
 Advanced Options
 -----------------
 
-**P value threshould to select DEgenes**
+**P value threshold to select DEgenes**
 
-Set a threshold value to define different expression genes. Default as 0.05.
-
+Set a threshold value to define differentially expressed genes. Default is 0.05.
 
 **Bootstrap iterations**
 
 Number of bootstrap iterations used to compute the `pPERT` value. Should be larger than 100. A recommended value is 2000.
 
-**Combine P value method**
+**Method to combine P values**
 
 Method used to combine the two types of p-values. If set to 'fisher' it will use Fisher's method. If set to 'norminv' it will use the normal inversion method.
 
-**Plot**
+**Plot perturbation**
 
-if plot argument set `Yes`,plot the gene perturbation accumulation vs log2 fold change for every gene on each pathway. default as `No`.
-
+If set to `Yes`, plots the gene perturbation accumulation vs log2 fold change for every gene on each pathway. Default is `No`.
 
 **Pathway IDs -- default as NULL and analysis all pathway.**
 
-if you want special one or more pathway to analysis, Input pathway id at here. for example: `03018, 03320` .
-
+if you want special one or more pathway to analysis, Input pathway id at here. for example: `03018, 03320`.
 
 ------
 
@@ -141,22 +137,22 @@ if you want special one or more pathway to analysis, Input pathway id at here. f
 
     **CSV file**
     
-    This file contained the ranked pathways and various statistics:
-        - **Name** is pathway name;
-        - **ID** is pathway ID;
+    This file contains the ranked pathways and various statistics:
+        - **Name** is the pathway name;
+        - **ID** is the pathway ID;
         - **pSize** is the number of genes on the pathway; 
         - **NDE** is the number of DE genes per pathway; 
-        - **tA** is the observed total preturbation accumulation in the pathway; 
+        - **tA** is the observed total perturbation accumulation in the pathway; 
         - **pNDE** is the probability to observe at least NDE genes on the pathway using a hypergeometric model; 
         - **pPERT** is the probability to observe a total accumulation more extreme than tA only by chance; 
         - **pG** is the p-value obtained by combining pNDE and pPERT; 
-        - **pGFdr** and **pGFWER** are the False Discovery Rate and respectively Bonferroni adjusted global p-values; 
+        - **pGFdr** and **pGFWER** are the False Discovery Rate and Bonferroni adjusted global p-values; 
         - **Status** gives the direction in which the pathway is perturbed (activated or inhibited). 
         - **KEGGLINK** gives a web link to the KEGG website that displays the pathway image with the differentially expressed genes highlighted in red.
         
     **PDF file**
     
-    if plot argument set `Yes`, it will output the plots for the gene perturbation accumulation vs log2 fold change for every gene on each pathway.
+    If the plot argument is set to `Yes`, it will output the plots for the gene perturbation accumulation vs log2 fold change for every gene on each pathway.
     
 ------
 
@@ -167,17 +163,7 @@ Please cite SPIA_ appropriately if you use them.
     ]]></help>
     
     <citations>
-       <!-- Example of annotating a citation using a DOI. -->
        <citation type="doi">10.1016/j.compbiolchem.2017.09.009</citation>
-    
-       <!-- Example of annotating a citation using a BibTex entry. -->
-       <!--<citation type="bibtex">@ARTICLE{Kim07aninterior-point,
-           author = {Seung-jean Kim and Kwangmoo Koh and Michael Lustig and Stephen Boyd and Dimitry Gorinevsky},
-           title = {An interior-point method for large-scale l1-regularized logistic regression},
-           journal = {Journal of Machine Learning Research},
-           year = {2007},
-           volume = {8},
-           pages = {1519-1555}
-       }</citation>-->
  </citations>
+
 </tool>

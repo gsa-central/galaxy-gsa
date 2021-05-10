@@ -1,10 +1,12 @@
-<tool id="ReactomePA" name="Reactome Pathway enrich Analysis of a gene set" version="0.1.0">
-    <description>Input a vector of all different expression gene and Output the enriched Significant Reactome Pathways</description>
+<tool id="ReactomePA" name="ReactomePA" version="0.1.0">
+    <description>Reactome Pathway Analysis</description>
+
     <requirements>
         <requirement type="package" version="1.20.3">r-getopt</requirement>
         <requirement type="package" version="1.34.0">bioconductor-ReactomePA</requirement>
         <requirement type="package" version="3.12.0">bioconductor-org.Hs.eg.db</requirement>
     </requirements>
+
     <command detect_errors="exit_code" interpreter="Rscript --vanilla"><![CDATA[
         $__tool_directory__/ReactomePA.R   
         -g '$gene_list_file' 
@@ -22,22 +24,20 @@
     ]]></command>
 
     <inputs>
-        <param type="data" name="gene_list_file" format="csv" label="Different expression genes" help="An CSV file included DEgenes column that is all different expression genes with entrez id." />
-        <param type="select" name="organism" label="Organism" help="Choose organism for you data. Here only supposted human, rat, mouse, celegans, yeast, zebrafish and fly.">
-            <option value="human" selected="True">human</option>
-            <option value="rat">rat</option>
-            <option value="mouse">mouse</option>
-            <option value="celegans">celegans</option>
-            <option value="yeast">yeast</option>
-            <option value="zebrafish">zebrafish</option>
-            <option value="fly">fly</option>
+        <param type="data" name="gene_list_file" format="csv" label="Differentially expressed gene list" help="A csv file including a DEgenes column, that is, the Entrez ID of all differentially expressed genes." />
+        <param type="select" name="organism" label="Organism" help="Choose organism. Only human, rat, mouse, celegans, yeast, zebrafish and fly are included.">
+            <option value="human" selected="True">human (H sapiens)</option>
+            <option value="rat">rat (R norvegicus)</option>
+            <option value="mouse">house mouse (M musculus)</option>
+            <option value="celegans">roundworm (C elegans)</option>
+            <option value="yeast">yeast (S cerevisiae)</option>
+            <option value="zebrafish">zebrafish (D rerio)</option>
+            <option value="fly">fruit fly (D melanogaster)</option>
         </param>
         
         <section name="adv" title="Advanced Options" expanded="false">
-
-            <param type="float" name="pvalueCutoff" value="0.05" min="0.00" max="1.00" label="P-value threshold" help="Default as 0.05. The value is to cut off the P-value of pathway."/>
-            
-            <param type="select" name="pAdjustMethod" label="Method for Adjust p-value of pathway" help="Choose one method to adjust p-value of pathway.">
+            <param type="float" name="pvalueCutoff" value="0.05" min="0.00" max="1.00" label="P-value threshold" help="This is the cutoff p-value to determine significant enrichment of a pathway. Default is 0.05."/>
+            <param type="select" name="pAdjustMethod" label="Method to adjust pathway p-values for multiple testing" help="Choose one method to adjust pathway p-values.">
                 <option value="BH" selected="True">BH</option>
                 <option value="holm">holm</option>
                 <option value="hochberg">hochberg</option>
@@ -47,17 +47,17 @@
                 <option value="fdr">fdr</option>
                 <option value="none">none</option>
             </param>
-            <param type="boolean" name="convertId" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Convert gene ID to SYMBOL" help="Select Yes if you want to convert entrez gene id to gene name, see the Help section below. Default: No." />
-            
-            <param type="integer" name="minGSSize" value="10" label="Minimal size of each geneSet" help="Minimal size of genes annotated by Ontology term for testing"/>
-            <param type="integer" name="maxGSSize" value="500" label="Maximal size of each geneSet" help="Maximal size of each geneSet for analyzing" />
+            <param type="boolean" name="convertId" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Convert gene ID to SYMBOL" help="Select Yes if you want to convert entrez gene IDs to gene names (see the Help section below). Default: No." />
+            <param type="integer" name="minGSSize" value="10" label="Minimum size of each geneSet" help="Gene sets with less genes than this value will be ignored."/>
+            <param type="integer" name="maxGSSize" value="500" label="Maximum size of each geneSet" help="Gene sets with more genes than this value will be ignored." />
         </section>
+
     </inputs>
-    
     
     <outputs>
         <data name="Significant_Reactome_Pathway_result" format="csv" label="Significant_Reactome_Pathway_result" />
     </outputs>
+
     <tests>
         <test>
             <param name="gene_list_file" value="Different_expression_gene.csv" ftype="csv" />
@@ -70,21 +70,22 @@
             <output name="Significant_Reactome_Pathway_result" file="t1.csv" ftype="csv" />
         </test>
     </tests>
+
     <help><![CDATA[
+
 .. class:: infomark 
 
 **What it does**
 
 Reactome_ is a free, open-source, curated and peer-reviewed pathway database. 
-Our goal is to provide intuitive bioinformatics tools for the visualization, 
-interpretation and analysis of pathway knowledge to support basic research, 
-genome analysis, modeling, systems biology and education. 
+Their goal is to provide intuitive bioinformatics tools for the visualization, 
+interpretation and analysis of pathway knowledge. 
 
 .. _Reactome: https://reactome.org
 
-Reactome Pathway enrich Analysis of a gene set is a tool to enrich Significant Reactome Pathways with a list of different expression genes.
+**ReactomePA** is a tool to enrich Significant Reactome Pathways with a list of differentially expressed genes.
 
-This tool uses function `enrichPathway` in ReactomePA_ package.
+This tool uses the function `enrichPathway` in the ReactomePA_ package.
 
 .. _ReactomePA: http://www.bioconductor.org/packages/release/bioc/html/ReactomePA.html
 
@@ -97,11 +98,11 @@ This tool uses function `enrichPathway` in ReactomePA_ package.
 Basic Options
 --------------
 
-**Different expression genes**
+**Differentially expressed gene list**
 
-This tool requires an CSV file which has `DEgenes` column contained all different expression entrez genes id.
+This tool requires a csv file which has a `DEgenes` column containing the entrez gene ID of all differentially expressed genes.
 
-Example - **DE genes file**
+Example:
 
     ========== === 
     DEgenes     
@@ -116,28 +117,26 @@ Example - **DE genes file**
 
 **Organism**
 
-Choose organism for you data. Here only supposted human, rat, mouse, celegans, yeast, zebrafish and fly.
-
-
+Choose the right organism for your data.  Only human, rat, mouse, celegans, yeast, zebrafish and fly are included.
 
 Advanced Options
 -----------------
 
 **P-value threshold**
 
-Default as 0.05. The value is to cut off the P-value of pathway.
+This is the cutoff p-value to determine significant enrichment of a pathway. Default is 0.05.
 
-**Method for Adjust p-value of pathway**
+**Method to adjust pathway p-values for multiple testing**
 
-Choose one method to adjust p-value of pathway. Here supposted `"BH"`, `"holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BY"`, `"fdr"` and `"none"`. Default as `"BH"`.
+Choose one method to adjust pathway p-values. Included methods are: `"BH"`, `"holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BY"`, `"fdr"` and `"none"`. Default is `"BH"`.
 
 **Convert gene ID to SYMBOL**
 
-If you want to convert entrez gene id to gene SYMBOL name, choose Yes. Default: No.
+If you want to convert entrez gene ID to gene SYMBOL name, choose Yes. Default: No.
 
-**Minimal and maximal size of each geneSet**
+**Minimum and maximum size of each geneSet**
 
-Set minimal and maximal size of each geneSet for analyzing. Default as 10 and 500.
+Set minimum and maximum size of each gene set to be included in the analysis. Default are 10 and 500.
 
 ------
 
@@ -145,7 +144,7 @@ Set minimal and maximal size of each geneSet for analyzing. Default as 10 and 50
 **Output**
 ==========
 
-An CSV file included all enrichment pathways.
+A csv file including all enriched pathways.
 
 Example - **Single Count Matrix**:
 
