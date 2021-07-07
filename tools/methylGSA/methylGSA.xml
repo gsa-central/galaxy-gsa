@@ -1,0 +1,147 @@
+<tool id="methylGSA" name="methylGSA" version="0.1.0" python_template_version="3.5">
+    <description>Gene Set Analysis for DNA Methylation data</description>
+
+    <requirements>
+        <requirement type="package" version="0.6.0">bioconductor-IlluminaHumanMethylationEPICanno.ilm10b4.hg19</requirement>
+        <requirement type="package" version="0.6.0">bioconductor-IlluminaHumanMethylation450kanno.ilmn12.hg19</requirement>
+        <requirement type="package" version="1.8.0">bioconductor-methylGSA</requirement>
+        <requirement type="package" version="1.20.3">r-getopt</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '$__tool_directory__/methylGSA.R' 
+        --data_file '$data_file' 
+        --test_method '$method' 
+        --array_type '$array_type' 
+        --group '$Group' 
+        --GS_list '$geneset' 
+        --minsize '$minSize'  
+        --maxsize '$maxSize'  
+        --result '$gsa_result'
+        
+    ]]></command>
+
+    <inputs>
+        <param name="data_file" type="data" format="txt" label="CpG IDs and their p-value" help="A text file with two columns: The CpG IDs and their p-values." />
+        <param name="array_type" type="select" label="Array_type" help="450K or EPIC." >
+            <option value="450K">450K</option>
+            <option value="EPIC">EPIC</option>
+        </param>
+        <param name="Group" type="select" label="Group" help="See help for more details.">
+            <option value="all">all</option>
+            <option value="body">body</option>
+            <option value="promoter1">promoter1</option>
+            <option value="promoter2">promoter2</option>
+        </param>
+        <param name="method" type="select" label="Test method" display="radio" help="See help for more details." >
+            <option value="methylglm">methylglm</option>
+            <option value="gometh">gometh</option>
+            <option value="RRA_ORA">RRA(ORA)</option>
+            <option value="RRA_GSEA">RRA(GSEA)</option>
+        </param>
+        <param name="geneset" type="select" label="Gene sets" help="Select gene sets to test." >
+            <option value="GO">Gene Ontology</option>
+            <option value="KEGG">KEGG</option>
+            <option value="Reactome">Reactome</option>
+        </param> 
+        
+        <param name="minSize" type="integer" label="Minimum gene set size" value="15" min="1" max="1000" help="Gene sets with less than this number of elements will not be included in the analysis." />
+        <param name="maxSize" type="integer" label="Maximum gene set size" value="500" min="1" max="1000" help="Gene sets with more than this number of elements will not be included in the analysis." />
+        
+    </inputs>
+
+    <outputs>
+        <data name="gsa_result" format="csv" label="methylGSA_result" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="data_file" value="cpg.csv" ftype="txt" />
+        <param name="array_type" value="450K"/>
+        <param name="Group" value="all" />
+        <param name="method" value="methylglm" />
+        <param name="geneset" value="GO" />
+        <param name="minSize" value="15" />
+        <param name="maxSize" value="500" />
+            <output name="gsa_result"  file="methylGSA_result.csv" ftype="csv" />    
+        </test>
+    </tests>
+
+    <help><![CDATA[
+                
+    .. class:: infomark
+    
+    **What it does**
+    
+    **methylGSA** is a tool for gene set testing with length bias adjustment for DNA methylation data. 
+    It allows users to identify enriched or over-represented gene sets or pathways from the Gene
+    Ontology, KEGG and Reactome databases.
+
+-------
+
+=========
+**Input**
+=========
+    
+    **CpG IDs and their p-value**
+
+    Users are expected to upload a txt file with two columns: The fist column with the CpG IDs, and the second column with the p-values correspond to the CpGs. For example:
+
+    ===========   ===========
+    cg13869341    0.307766
+    cg14008030    0.257672
+    cg12045430    0.552322
+    cg20826792    0.056383
+    cg00381604    0.468549
+    cg20253340    0.483770
+    cg21870274    0.812402
+    ===========   ===========
+
+    Files should be no more than 100MB. 
+    
+    **array_type**
+    
+    `450K`: Illumina 450 K Beadchip  
+    
+    `EPIC`: Illumina EPIC Beadchip
+    
+    **Group**
+    
+    **Group** defines the type of CpG to be considered by the `methylRRA` or `methylglm` functions. By default, 
+    group is set to `all`, which means that all CpGs are considered regardless of their gene group. 
+    If group is set to `body`, only CpGs on gene body will be considered. If group is `promoter1` 
+    or `promoter2`, only CpGs on promoters will be considered. 
+    Based on the annotation in IlluminaHumanMethylation450kanno.ilmn12.hg19 
+    and IlluminaHumanMethylationEPICanno.ilm10b4.hg19, `body`, `promoter1` and `promoter2` are defined as:
+    
+        * body: CpGs whose gene group correspond to “Body” or “1stExon”
+        * promoter1: CpGs whose gene group correspond to “TSS1500” or “TSS200”
+        * promoter2: CpGs whose gene group correspond to “TSS1500”, “TSS200”, “1stExon”, or “5’UTR”
+        
+    **Test method**
+    
+        * methylglm: Implement logistic regression adjusting for number of probes in enrichment analysis
+        * gometh: Gene ontology testing for Illumina methylation array data
+        * RRA(ORA): Enrichment analysis with ORA method after adjusting multiple p-values of each gene by Robust Rank Aggregation
+        * RRA(GSEA): Enrichment analysis with GSEA method after adjusting multiple p-values of each gene by Robust Rank Aggregation
+    
+    **Gene sets tested**
+    
+    * Gene Ontology: http://www.geneontology.org
+    * KEGG (Kyoto Encyclopedia of Genes and Genomes): https://www.genome.jp/kegg/
+    * Reactome: https://reactome.org
+    
+==========
+**Output**
+==========
+
+    **methylGSA_result**
+    This file is a csv file which contains gene set tests results.
+    
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1093/bioinformatics/bty892</citation>    
+    </citations>
+    
+</tool>

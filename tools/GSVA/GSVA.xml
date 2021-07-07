@@ -1,0 +1,151 @@
+<tool id="GSVA" name="GSVA (Gene Set Variation Analysis)" version="0.1.0">
+    <description>GSVA and other three single-sample GSA methods</description>
+
+    <requirements>
+        <requirement type="package" version="1.38.0">bioconductor-GSVA</requirement>
+        <requirement type="package" version="1.0.12">r-pheatmap</requirement>
+        <requirement type="package" version="1.20.3">r-getopt</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '$__tool_directory__/GSVA.R'
+        --expr '$expression_data'
+        --geneSet '$geneSet'
+        --method '$method'
+        --img_type '$imgfile.img_args.img_type'
+        --img_width '$imgfile.img_args.img_width'
+        --img_height '$imgfile.img_args.img_height'
+        --img_file '$output_img_file'
+        --GSVA_result '$GSVA_result'
+    ]]></command>
+
+    <inputs>
+        <param name="expression_data" type="data" format="csv" label="Gene expression data" help="A csv file containing a matrix of expression values where rows correspond to genes and columns correspond to samples." />
+        <param name="geneSet" type="data" format="rdata" label="Gene Sets" help="An rdata file including a 'geneSet' variable (which is a geneSetCollection object)."/>
+        <param name="method" type="select" label="Method" display="radio" help="Four single-sample methods: GSVA, ssGSEA, z-score and PLAGE. Details in the help section.">
+            <option value="gsva">GSVA</option>
+            <option value="ssgsea">ssGSEA</option>
+            <option value="zscore">z-score</option>
+            <option value="plage">PLAGE</option>
+        </param>
+        
+        <section name="imgfile" title="Heatmap options" expanded="false">
+            <conditional name="img_args">
+                <param name="img_type" type="select" label="Heatmap file type"> 
+                    <option value="PNG" selected="true">PNG</option>
+                    <option value="PDF">PDF</option>
+                    <option value="JPG">JPG</option>
+                </param>
+                
+                <when value="PNG">
+                    <param name="img_width" type="integer" value="480" min="480" label="Img width(px)" />
+                    <param name="img_height" type="integer" value="480" min="480" label="Img height(px)" />
+                </when>
+                
+                <when value="JPG">
+                    <param name="img_width" type="integer" value="480" min="480" label="Img width(px)" />
+                    <param name="img_height" type="integer" value="480" min="480" label="Img height(px)" />
+                </when>
+                
+                <when value="PDF">
+                    <param name="img_width" type="integer" value="7" min="7" label="Img width(inches)" />
+                    <param name="img_height" type="integer" value="7" min="7" label="Img height(inches)" />                
+                </when>
+
+            </conditional>    
+        </section>
+        
+    </inputs>
+
+    <outputs>
+        <data name="GSVA_result" format="csv" label="GSVA_enrich_result" />
+        <data format="pdf" name="output_img_file" label="GSVA_heatmap">
+            <change_format>
+                <when input="imgfile.img_args.img_type" value="PNG" format="png"/>
+                <when input="imgfile.img_args.img_type" value="JPG" format="jpg"/>
+            </change_format>
+        </data>
+    </outputs>
+
+	<tests>
+	  <test>
+	    <param name="expression_data" value="gsva_input2_GSE10245.csv" ftype="csv" />
+	    <param name="geneSet" value="GeneSet_from_Msigdb_KEGG.rdata" ftype="rdata" />
+	    <param name="method" value="gsva" />
+	    <section name="imgfile">
+	      <conditional name="img_args">
+	        <param name="img_type" value="PNG" />
+	        <param name="img_width" value="480" />
+	        <param name="img_height" value="480" />
+	      </conditional>
+	    </section>
+	    <output name="GSVA_result" file="GSVA_enrich_result.csv" ftype="csv" />
+	    <output name="output_img_file" file="GSVA_heatmap.png"  ftype="png" />
+	  </test>
+	</tests>
+	
+    <help><![CDATA[
+        
+.. class:: infomark 
+
+**What it does**
+
+**GSVA** is a Gene Set Analysis R package that estimates variation of pathway activity over a sample population in an unsupervised manner. This tool includes four methods to analyze microarray and RNA-seq data.
+
+- **GSVA**: Gene Set Variation Analysis (GSVA) calculates sample-wise gene set enrichment scores as a function of genes inside and outside the gene set, analogously to a competitive gene set test. And it estimates variation of gene set enrichment over the samples independently of any class label.
+
+- **PLAGE**: Pathway Level analysis of Gene Expression (PLAGE) standardizes each gene expression profile over the samples and then estimates the pathway activity profiles for each gene set as the coefficients of the first right-singular vector of the singular value.
+
+- **z-score**: The combined z-score method also standardizes each gene expression profile into z-scores and combine the individual gene z-scores per sample to pathway activity profile.
+
+- **ssGSEA**: The ssGSEA method uses the difference in empirical cumulative distribution functions of gene expression rank inside and outside the gene set to calculate an enrichment statistic per sample which is further normalized by the range of values taken throughout all gene sets and samples.
+
+--------
+
+=========
+**Input**
+=========
+
+**Gene expression data** 
+
+A csv file including a matrix of expression values where rows correspond to genes and columns correspond to samples. Recommended gene id is Entrez ID.
+
+**Gene Sets**
+
+**Gene Sets** is an `rdata` file including a 'geneSet' variable (which is a geneSetCollection object built by the `GSEABase` package). You can use the **GeneSet from Msigdb/KEGG** tool to get this file. You must pay attention to set the same gene id type as in the gene expression dataset.
+
+**Method** 
+	
+Method to be used in the estimation of gene set enrichment scores per sample. By default this is set to `GSVA` but other options are `ssGSEA`, `z-score` and `PLAGE`. The latter two first standardize expression profiles into z-scores over the samples and, in the case of zscore, it combines them together as their sum divided by the square-root of the size of the gene set, while in the case of PLAGE they are used to calculate the singular value decomposition (SVD) over the genes in the gene set and use the coefficients of the first right-singular vector as pathway activity profile.
+
+--------
+
+==========
+**Output**
+==========
+
+**1. A gene-set by sample matrix of enrichment scores**
+
+    ========= ========== ======== ======== ======== ==== =========
+    geneSet     sample_1 sample_2 sample_3 sample_4 ...  sample_n
+    ========= ========== ======== ======== ======== ==== =========
+    pathway_1   
+    pathway_2
+    pathway_3
+    pathway_4
+    ...
+    pathway_n
+    ========= ========== ======== ======== ======== ==== =========
+
+ 
+**2. A heatmap for the matrix of enrichment scores**
+
+ You can define the heatmap file type, width and height in the tool's input.
+ 
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1186/1471-2105-14-7</citation>
+    </citations>
+
+</tool>

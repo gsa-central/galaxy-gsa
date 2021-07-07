@@ -1,0 +1,168 @@
+<tool id="ReactomePA" name="ReactomePA" version="0.1.0">
+    <description>Reactome Pathway Analysis</description>
+
+    <requirements>
+        <requirement type="package" version="1.20.3">r-getopt</requirement>
+        <requirement type="package" version="1.34.0">bioconductor-ReactomePA</requirement>
+        <requirement type="package" version="3.12.0">bioconductor-org.Hs.eg.db</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code" interpreter="Rscript --vanilla"><![CDATA[
+        $__tool_directory__/ReactomePA.R   
+        -g '$gene_list_file' 
+        -s '$Significant_Reactome_Pathway_result' 
+        
+        -o '$organism'
+        
+        -p '$adv.pvalueCutoff' 
+        -w '$adv.pAdjustMethod' 
+        #if $adv.convertId=="TRUE":
+        -c
+        #end if
+        -i '$adv.minGSSize' 
+        -a '$adv.maxGSSize'
+    ]]></command>
+
+    <inputs>
+        <param type="data" name="gene_list_file" format="csv" label="Differentially expressed gene list" help="A csv file including a DEgenes column, that is, the Entrez ID of all differentially expressed genes." />
+        <param type="select" name="organism" label="Organism" help="Choose organism. Only human, rat, mouse, celegans, yeast, zebrafish and fly are included.">
+            <option value="human" selected="True">human (H sapiens)</option>
+            <option value="rat">rat (R norvegicus)</option>
+            <option value="mouse">house mouse (M musculus)</option>
+            <option value="celegans">roundworm (C elegans)</option>
+            <option value="yeast">yeast (S cerevisiae)</option>
+            <option value="zebrafish">zebrafish (D rerio)</option>
+            <option value="fly">fruit fly (D melanogaster)</option>
+        </param>
+        
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param type="float" name="pvalueCutoff" value="0.05" min="0.00" max="1.00" label="P-value threshold" help="This is the cutoff p-value to determine significant enrichment of a pathway. Default is 0.05."/>
+            <param type="select" name="pAdjustMethod" label="Method to adjust pathway p-values for multiple testing" help="Choose one method to adjust pathway p-values.">
+                <option value="BH" selected="True">BH</option>
+                <option value="holm">holm</option>
+                <option value="hochberg">hochberg</option>
+                <option value="hommel">hommel</option>
+                <option value="bonferroni">bonferroni</option>
+                <option value="BY">BY</option>
+                <option value="fdr">fdr</option>
+                <option value="none">none</option>
+            </param>
+            <param type="boolean" name="convertId" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Convert gene ID to SYMBOL" help="Select Yes if you want to convert entrez gene IDs to gene names (see the Help section below). Default: No." />
+            <param type="integer" name="minGSSize" value="10" label="Minimum size of each geneSet" help="Gene sets with less genes than this value will be ignored."/>
+            <param type="integer" name="maxGSSize" value="500" label="Maximum size of each geneSet" help="Gene sets with more genes than this value will be ignored." />
+        </section>
+
+    </inputs>
+    
+    <outputs>
+        <data name="Significant_Reactome_Pathway_result" format="csv" label="Significant_Reactome_Pathway_result" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="gene_list_file" value="Different_expression_gene.csv" ftype="csv" />
+            <param name="organism" value="human"/>
+            <param name="minGSSize" value="15"/>
+            <param name="maxGSSize" value="200"/>
+            <param name="pvalueCutoff" value="0.06"/>
+            <param name="pAdjustMethod" value="holm"/>
+            <param name="input7" value="true"/>
+            <output name="Significant_Reactome_Pathway_result" file="t1.csv" ftype="csv" />
+        </test>
+    </tests>
+
+    <help><![CDATA[
+
+.. class:: infomark 
+
+**What it does**
+
+Reactome_ is a free, open-source, curated and peer-reviewed pathway database. 
+Their goal is to provide intuitive bioinformatics tools for the visualization, 
+interpretation and analysis of pathway knowledge. 
+
+.. _Reactome: https://reactome.org
+
+**ReactomePA** is a tool to enrich Significant Reactome Pathways with a list of differentially expressed genes.
+
+This tool uses the function `enrichPathway` in the ReactomePA_ package.
+
+.. _ReactomePA: http://www.bioconductor.org/packages/release/bioc/html/ReactomePA.html
+
+---------
+
+==========
+**Inputs**
+==========
+
+Basic Options
+--------------
+
+**Differentially expressed gene list**
+
+This tool requires a csv file which has a `DEgenes` column containing the entrez gene ID of all differentially expressed genes.
+
+Example:
+
+    ========== === 
+    DEgenes     
+    ========== === 
+    4312
+    8318
+    10874
+    55143
+    55388
+    991
+    ========== === 
+
+**Organism**
+
+Choose the right organism for your data.  Only human, rat, mouse, celegans, yeast, zebrafish and fly are included.
+
+Advanced Options
+-----------------
+
+**P-value threshold**
+
+This is the cutoff p-value to determine significant enrichment of a pathway. Default is 0.05.
+
+**Method to adjust pathway p-values for multiple testing**
+
+Choose one method to adjust pathway p-values. Included methods are: `"BH"`, `"holm"`, `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BY"`, `"fdr"` and `"none"`. Default is `"BH"`.
+
+**Convert gene ID to SYMBOL**
+
+If you want to convert entrez gene ID to gene SYMBOL name, choose Yes. Default: No.
+
+**Minimum and maximum size of each geneSet**
+
+Set minimum and maximum size of each gene set to be included in the analysis. Default are 10 and 500.
+
+------
+
+==========
+**Output**
+==========
+
+A csv file including all enriched pathways.
+
+Example - **Single Count Matrix**:
+
+    =============== =============================================== =========== ===========
+    ID               Description                                    GeneRatio   BgRatio
+    =============== =============================================== =========== ===========
+    R-HSA-69618     Mitotic Spindle Checkpoint                      22/326      113/10704
+    R-HSA-2500257   Resolution of Sister Chromatid Cohesion         23/326      126/10704
+    R-HSA-141424    Amplification of signal from the kinetochores	20/326      96/10704
+    R-HSA-9648025   EML4 and NUDC in mitotic spindle formation		20/326      117/10704
+    R-HSA-5663220   RHO GTPases Activate Formins                    21/326      140/10704
+    =============== =============================================== =========== ===========
+    
+
+    ]]></help>
+    
+    <citations>
+        <citation type="doi">10.1039/c5mb00663e</citation>
+    </citations>
+    
+</tool>
