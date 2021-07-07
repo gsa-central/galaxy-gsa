@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 
-=======
 # Galaxy GSA tools
 
 1. Get gene sets from MSigdb/KEGG
@@ -11,4 +9,4 @@
 6. Chipenrich
 7. methylGSA
 8. mogsa
->>>>>>> upload the docker files
+
