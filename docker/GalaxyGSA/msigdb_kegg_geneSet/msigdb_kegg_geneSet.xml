@@ -1,0 +1,199 @@
+<tool id="msigdb_kegg_geneSet" name="Get gene sets from Msigdb/KEGG" version="0.1.0">
+    <description>Get a geneSet object from Msigdb or KEGG</description>
+
+    <requirements>
+        <requirement type="package" version="1.30.0">bioconductor-KEGGREST</requirement>
+        <requirement type="package" version="7.2.1">r-msigdbr</requirement>
+        <requirement type="package" version="1.52.1">bioconductor-GSEABase</requirement>
+        <requirement type="package" version="1.20.3">r-getopt</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '$__tool_directory__/msigdb_kegg_geneSet.R'
+        
+        --source '$input_args.source' 
+        
+        #if str($input_args.source) == 'KEGG':
+            --organism '$input_args.organism'
+        #end if
+        
+        #if str($input_args.source) == 'Msigdb':
+            --species '$input_args.species'
+            --category '$input_args.cat.category'
+            --geneIdType '$input_args.geneIdType'
+            
+            #if str($input_args.cat.category) == 'C2':
+                --subcategory '$input_args.cat.subcategory'
+            #end if
+            
+            #if str($input_args.cat.category) == 'C3':
+                --subcategory '$input_args.cat.subcategory'
+            #end if
+            
+            #if str($input_args.cat.category) == 'C4':
+                --subcategory '$input_args.cat.subcategory'
+            #end if
+            
+            #if str($input_args.cat.category) == 'C5':
+                --subcategory '$input_args.cat.subcategory'
+            #end if
+            
+        #end if
+
+        --outputRData '$outputRData'
+    
+    ]]></command>
+
+    <inputs>
+        <conditional name="input_args">
+            <param type="select" name="source" label="KEGG or MSigDB" help="Choose gene set from KEGG or MSigDB.">
+                <option value="KEGG" selected="true">KEGG</option>
+                <option value="Msigdb" >MSigDB</option>
+            </param>
+        
+            <when value="KEGG">
+                <param type="text" name="organism" value="hsa" label="organism" help="A KEGG organism code (see https://www.kegg.jp/kegg/catalog/org_list.html). For example, human is `hsa`, Mus musculus is `mmu`."/>    
+            </when>            
+            <when value="Msigdb">
+                <param type="select" name="species" label="Species" help="Species name, such as Homo sapiens or Mus musculus.">
+                    <option value="Homo sapiens" selected="true">human (H sapiens)</option>
+                    <option value="Bos taurus">cattle (B taurus)</option>
+                    <option value="Caenorhabditis elegans">roundworm (C elegans)</option>
+                    <option value="Canis lupus familiaris">dog (C familiaris)</option>
+                    <option value="Danio rerio">zebrafish (D rerio)</option>
+                    <option value="Drosophila melanogaster">fruit fly (D melanogaster)</option>
+                    <option value="Gallus gallus">chicken (G gallus)</option>
+                    <option value="Mus musculus">house mouse (M musculus)</option>
+                    <option value="Rattus norvegicus">Rat (R norvegicus)</option>
+                    <option value="Saccharomyces cerevisiae">baker's or brewer's yeast (S cerevisiae)</option>
+                    <option value="Sus scrofa">pig (S scrofa)</option>
+                </param>    
+                
+                <conditional name="cat">
+                    <param type="select" name="category" label="Category" help="MSigDB collection abbreviation, such as H or C1.">
+                        <option value="H">h: hallmark gene sets</option>
+                        <option value="C1">c1: positional gene sets</option>
+                        <option value="C2" selected="true">c2: curated gene sets</option>
+                        <option value="C3">c3: regulatory target gene sets</option>
+                        <option value="C4">c4: computational gene sets</option>
+                        <option value="C5">c5: Ontology gene sets</option>
+                        <option value="C6">c6: oncogenic signature gene sets</option>
+                        <option value="C7">c7: immunologic signature gene sets</option>
+                        <option value="C8">c8: cell type signature gene sets</option>
+                    </param>
+                    <when value="H"></when>
+                    <when value="C1"></when>
+                    <when value="C2">
+                        <param type="select" name="subcategory" label="Sub Category" multiple="true" display="checkboxes">
+                            <option value="CGP">chemical and genetic perturbations</option>
+                            <option value="CP">all canonical pathways</option>
+                            <option value="CP:BIOCARTA">BioCarta gene sets</option>
+                            <option value="CP:KEGG" selected="true">KEGG gene sets</option>
+                            <option value="CP:PID">PID gene sets</option>
+                            <option value="CP:REACTOME">Reactome gene sets</option>
+                            <option value="CP:WIKIPATHWAYS">WikiPathways gene sets</option>
+                        </param>
+                    </when>
+                    
+                    <when value="C3">
+                        <param type="select" name="subcategory" label="Sub Category" multiple="true" display="checkboxes">
+                            <option value="MIR:MIR_Legacy">legacy microRNA targets</option>
+                            <option value="MIR:MIRDB">MIRDB targets</option>
+                            <option value="TFT:GTRD">GTRD targets </option>
+                            <option value="TFT:TFT_Legacy">legacy transcription factor targets</option>
+                        </param>    
+                    </when>
+                    
+                    <when value="C4">
+                        <param type="select" name="subcategory" label="Sub Category" multiple="true" display="checkboxes">
+                            <option value="CGN">cancer gene neighborhoods</option>
+                            <option value="CM">cancer modules</option>
+                        </param>
+                    </when>
+                    
+                    <when value="C5">
+                        <param type="select" name="subcategory" label="Sub Category" multiple="true" display="checkboxes">
+                            <option value="GO:BP">GO biological processes</option>
+                            <option value="GO:CC">GO cellular components</option>
+                            <option value="GO:MF">GO molecular functions</option>
+                            <option value="HPO">Human Phenotype Ontology</option>
+                        </param>
+                    </when>
+                    <when value="C6"></when>
+                    <when value="C7"></when>
+                    <when value="C8"></when>
+                    
+                </conditional>
+                <param type="select" name="geneIdType" label="gene ID type" help="Specify gene ID type in pathway. Default is Entrez ID.">
+                    <option value="entrez" selected="true">Entrez</option>
+                    <option value="symbol">Symbol</option>
+                </param>
+            </when>
+        
+        </conditional>
+        
+        <!--<param type="boolean" name="whetherOutputfile" truevalue="True" false="False" checked="False" label="Output GMT file" />-->
+
+    </inputs>
+
+    <outputs>
+        <!--<data name="outputGMTFile" format="gmt" />-->
+        <data name="outputRData" format="rdata" label="GeneSet object from MSigDB/KEGG" />
+    </outputs>
+
+    <tests>
+        <test>
+            <conditional name="input_args">
+                <param name="source" value="KEGG" />
+                <param name="organism" value="hsa" />    
+            </conditional>
+            <output name="outputRData" file="geneSet.RData"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    
+.. class:: infomark
+
+**What it does**
+
+This is a tool built to get a 'geneSetCollection' R object from the MSigDB or KEGG database. 
+
+If the gene sets source is KEGG_, it will only receive a KEGG organism code and output an Rdata file which has a `geneSet` object containing all KEGG pathways with their Entrez gene ID.
+
+If the gene sets source is MSigDB_, you must assign specific species and categories to define the Gene Set collection. Again, the output is an Rdata file which has a `geneSet` object.
+
+-----
+
+**More Information**
+
+**MSigDB Gene Set Colletions**
+
+The MSigDB_ gene sets are divided into 9 major collections:
+
+* **H: hallmark gene sets**  are coherently expressed signatures derived by aggregating many MSigDB gene sets to represent well-defined biological states or processes.
+* **C1: positional gene sets** for each human chromosome and cytogenetic band.
+* **C2: curated gene sets** are from online pathway databases, publications in PubMed, and knowledge of domain experts.
+* **C3: motif gene sets** are based on conserved cis-regulatory motifs from a comparative analysis of the human, mouse, rat, and dog genomes.
+* **C4: computational gene sets** are defined by mining large collections of cancer-oriented microarray data.
+* **C5: GO gene sets** consist of genes annotated by the same GO terms.
+* **C6: oncogenic gene sets** are defined directly from microarray gene expression data from cancer gene perturbations.
+* **C7: immunologic gene sets** are defined directly from microarray gene expression data from immunologic studies.
+* **C8: cell type signature gene sets** curated from cluster markers identified in single-cell sequencing studies of human tissue.
+
+.. _MSigDB: http://software.broadinstitute.org/gsea/msigdb
+.. _KEGG: http://www.genome.jp/kegg/
+    ]]></help>
+
+    <citations>
+            <citation type="bibtex">@ARTICLE{Kim07aninterior-point,
+               author = {Xiaowei Huang and Songqing Mei and Antonio Mora},
+               title = {Galaxy-GSA –A suite of tools for advanced gene set analysis in Galaxy},
+               journal = {Bioinformatics},
+               year = {2021},
+               volume = {8},
+               pages = {1-3}
+           }</citation>
+    </citations>
+
+</tool>
