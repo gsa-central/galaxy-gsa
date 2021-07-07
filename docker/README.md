@@ -18,7 +18,7 @@
 3. test the image
 
    ```shell
-   docker run -d --privileged -p 8080:80 moralabgalaxy/galaxy-gsa::latest
+   docker run -d --privileged -p 8080:80 moralabgalaxy/galaxy-gsa:latest
    ```
 
 
