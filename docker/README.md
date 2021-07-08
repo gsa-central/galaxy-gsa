@@ -16,13 +16,13 @@
    cd galaxy-gsa
    cp -r tools docker/GalaxyGSA
    cd docker
-   docker build --tag moralabgalaxy/galaxy-gsa:latest .
+   docker build --tag moralab/galaxy-gsa:latest .
    ```
 
 3. test the image
 
    ```shell
-   docker run -d --privileged -p 8080:80 moralabgalaxy/galaxy-gsa:latest
+   docker run -d --privileged -p 8080:80 moralab/galaxy-gsa:latest
    ```
 
 4. Open http://localhost:8080/ with browser.
