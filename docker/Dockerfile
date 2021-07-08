@@ -14,6 +14,9 @@ ENV GALAXY_DEFAULT_ADMIN_USER=galaxy \
 	GALAXY_DEFAULT_ADMIN_PASSWORD=galaxy \
 	GALAXY_CONFIG_ADMIN_USERS=moralabgalaxy@163.com
 	
+# 3.3 Set to true to instruct Galaxy to look for and install missing tool dependencies before each job runs.
+ENV Galaxy_CONDA_AUTO_INSTALL=True
+
 # 4.Set the welcome page
 ENV GALAXY_CONFIG_WELCOME_URL=$GALAXY_CONFIG_DIR/web/galaxy_gsa_welcome.html
 
