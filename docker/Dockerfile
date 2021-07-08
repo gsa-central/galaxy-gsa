@@ -21,6 +21,7 @@ ENV Galaxy_CONDA_AUTO_INSTALL=True
 ENV GALAXY_CONFIG_WELCOME_URL=$GALAXY_CONFIG_DIR/web/galaxy_gsa_welcome.html
 
 # 5.Copy all Galaxy-GSA tools to the tools directory
+COPY GalaxyGSA $GALAXY_ROOT/tools/GalaxyGSA
 COPY GalaxyGSA $EXPORT_DIR/galaxy-central/tools/GalaxyGSA
 
 # 6.Copy the tool_conf.xml and integrated_tool_panel.xml to the config directory
