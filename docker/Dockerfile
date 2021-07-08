@@ -4,10 +4,16 @@ FROM bgruening/galaxy-stable
 # 2.author information
 MAINTAINER moralabgalaxy, moralabgalaxy@163.com
 
-# 3.Setting the brand as Galaxy-GSA
+# 3.1 Set the brand as Galaxy-GSA
 ENV GALAXY_CONFIG_BRAND=Galaxy-GSA
 ENV GALAXY_CONFIG_DISPLAY_GALAXY_BRAND=False 
 
+# 3.2 Set administrator account as galaxy with galaxy as password
+ENV GALAXY_DEFAULT_ADMIN_USER=galaxy \
+	GALAXY_DEFAULT_ADMIN_EMAIL=moralabgalaxy@163.com \
+	GALAXY_DEFAULT_ADMIN_PASSWORD=galaxy \
+	GALAXY_CONFIG_ADMIN_USERS=moralabgalaxy@163.com
+	
 # 4.Set the welcome page
 ENV GALAXY_CONFIG_WELCOME_URL=$GALAXY_CONFIG_DIR/web/galaxy_gsa_welcome.html
 
