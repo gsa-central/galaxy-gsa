@@ -28,7 +28,7 @@ COPY GalaxyGSA $EXPORT_DIR/galaxy-central/tools/GalaxyGSA
 COPY galaxy_GSA_tools_config/* $GALAXY_ROOT/config/
 
 # 7.Copy all files about welcome page to the web directory
-COPY welcome_pages/static $GALAXY_CONFIG_DIR/web/
+COPY welcome_pages $GALAXY_CONFIG_DIR/web/
 
 # 8.Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
