@@ -1,13 +1,30 @@
+# Galaxy-GSA Docker
+This Docker version is based on [bgruening/galaxy-stable](https://hub.docker.com/r/bgruening/galaxy-stable/)
+
+With our Galaxy-GSA, you need to install tools dependencies when you run the GSA tools.
+
+# Usage
+At first you need to install docker. Please follow the [very good instructions](https://docs.docker.com/get-docker/) from the Docker project.
+
+After the successful installation, all you need to do is:
+
+```
+docker run -d -p 8080:80 -p 8021:21 -p 8022:22 moralab/galaxy-gsa
+```
+
+and then visit http://localhost:8080 to check Galaxy-GSA docker.
+
+
+
 # Galaxy-GSA Docker building
 
 1. Download this repository.
 
    ```shell
-   git clone git@github.com:gsa-central/galaxy-gsa.git
-   ##Or use wget to download the files
-   # wget https://github.com/gsa-central/galaxy-gsa/archive/refs/heads/main.zip
+   # use wget to download the files
+   wget https://github.com/gsa-central/galaxy-gsa/archive/refs/heads/main.zip
    # unzip main.zip
-   # mv galaxy-gsa-main galaxy-gsa
+   mv galaxy-gsa-main galaxy-gsa 
    ```
 
 2. build the Galaxy-GSA image with `Dockerfile`
