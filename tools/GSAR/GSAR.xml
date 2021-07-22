@@ -115,7 +115,7 @@ Example:
 
 **Gene Sets**
 
-**Gene Sets** is an `rdata` file including a `geneSet` variable that is a `geneSetCollection` object built by the `GSEABase` bioconductor package. You can use the **GeneSet from Msigdb/KEGG** tool to get this file. You must pay attention to set the same gene id type as in the gene expression dataset.
+**Gene Sets** is an `rdata` file including a `geneSet` variable that is a `geneSetCollection` object built by the `GSEABase` bioconductor package. You can use the **get gene sets from Msigdb/KEGG** tool to get this file. You must pay attention to set the same gene id type as in the gene expression dataset.
 
 **Method** 
 
