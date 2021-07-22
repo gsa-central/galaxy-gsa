@@ -68,7 +68,7 @@
     classical enrichment analysis with a novel type of evidence, which measures the actual
     perturbation on a given pathway under a given condition.
     
-    A bootstap procedure is used to assess the significance of the observed total pathway perturbation.
+    A bootstrap procedure is used to assess the significance of the observed total pathway perturbation.
     
     Then we can calculate a global pathway significance P-value, which combines the enrichment and perturbation P-values.
     
