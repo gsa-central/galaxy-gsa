@@ -112,7 +112,7 @@ A csv file including a matrix of expression values where rows correspond to gene
 
 **Gene Sets**
 
-**Gene Sets** is an `rdata` file including a 'geneSet' variable (which is a geneSetCollection object built by the `GSEABase` package). You can use the **GeneSet from Msigdb/KEGG** tool to get this file. You must pay attention to set the same gene id type as in the gene expression dataset.
+**Gene Sets** is an `rdata` file including a 'geneSet' variable (which is a geneSetCollection object built by the `GSEABase` package). You can use the **get gene sets from Msigdb/KEGG** tool to get this file. You must pay attention to set the same gene id type as in the gene expression dataset.
 
 **Method** 
 	
