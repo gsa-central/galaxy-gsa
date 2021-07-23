@@ -1,6 +1,5 @@
 # Getting Galaxy-GSA tools from the toolshed
 
-# Getting Galaxy-GSA tools from the toolshed
 
 Before you install tools from the [Toolshed](https://toolshed.g2.bx.psu.edu/), you need to log in to your administrator account.    
 
