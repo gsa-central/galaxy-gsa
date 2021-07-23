@@ -1,3 +1,5 @@
+<img src="https://github.com/mora-lab/mora-lab.github.io/blob/master/picture/MORALAB_Banner.png">
+
 # Using Galaxy-GSA
 
 We have three implementations of Galaxy-GSA and we assume that you are using one of them (how to install Galaxy-GSA? see https://gsa-central.github.io/galaxy.html):
