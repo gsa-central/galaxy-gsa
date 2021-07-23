@@ -1,3 +1,5 @@
+<img src="https://github.com/mora-lab/mora-lab.github.io/blob/master/picture/MORALAB_Banner.png">
+
 # Galaxy-GSA Docker
 This Docker version is based on [bgruening/galaxy-stable](https://hub.docker.com/r/bgruening/galaxy-stable/)
 
