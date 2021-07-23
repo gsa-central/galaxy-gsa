@@ -1,20 +1,22 @@
 # Galaxy-GSA Docker
 This Docker version is based on [bgruening/galaxy-stable](https://hub.docker.com/r/bgruening/galaxy-stable/)
 
-With our Galaxy-GSA, you need to install tools dependencies when you run the GSA tools.
+With this version of Galaxy-GSA, you need to install the tools dependencies to run the GSA tools (see the list of dependencies at each tool's help).
 
 # Usage
-At first you need to install docker. Please follow the [very good instructions](https://docs.docker.com/get-docker/) from the Docker project.
 
-After the successful installation, all you need to do is:
+1. First you need to install docker. Please follow the instructions from the [Docker project](https://docs.docker.com/get-docker/) or from [our own website](https://github.com/mora-lab/installing/tree/main/docker).
+
+2. After a successful installation, all you need to do is:
 
 ```
-docker run -d -p 8080:80 -p 8021:21 -p 8022:22 moralab/galaxy-gsa
+sudo systemctl start docker
+sudo docker run -d -p 8080:80 -p 8021:21 -p 8022:22 moralab/galaxy-gsa
 ```
 
-and then visit http://localhost:8080 to check Galaxy-GSA docker.
+3. Open http://localhost:8080/ with a browser.
 
-
+The galaxy administrator user is `galaxy` with `galaxy` as password.
 
 # Galaxy-GSA Docker building
 
@@ -42,7 +44,8 @@ and then visit http://localhost:8080 to check Galaxy-GSA docker.
    docker run -d --privileged -p 8080:80 moralab/galaxy-gsa:latest
    ```
 
-4. Open http://localhost:8080/ with browser.
+4. Open http://localhost:8080/ with a browser.
 
 The galaxy administrator user is `galaxy` with `galaxy` as password.
 
+*Last updated: July 23rd, 2021*
