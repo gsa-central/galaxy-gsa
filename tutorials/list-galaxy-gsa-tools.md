@@ -6,8 +6,7 @@
 | 1 | Galaxy-GSA | WEB | https://gsa-central.github.io/galaxy.html |
 | 2 | Galaxy-GSA | Docker | https://gsa-central.github.io/galaxy.html |
 | 3 | Galaxy-GSA | VM | https://gsa-central.github.io/galaxy.html |
-| -- | --------- | --------- | -------- |
-| WEB = Web platform. Docker = Docker image. VM = Virtual Machine. |
+WEB = Web platform. Docker = Docker image. VM = Virtual Machine.
 
 ## Individual tools:
 | Nr | Tool name | Method | Type of method | Location |
@@ -28,9 +27,8 @@
 | 17 | GSAR | KS | FCS | https://toolshed.g2.bx.psu.edu/ |
 | 18 | GSAR | Agg-F | FCS | https://toolshed.g2.bx.psu.edu/ |
 | 19 | GSAR | GSNCA | FCS | https://toolshed.g2.bx.psu.edu/ |
-| -- | --------- | --------- | -------- | -------- |
-| ORA = Over-representation analysis. FCS = Functional class scoring. |
-| PT = Pathway topology based. SS = Single-sample. GR = Genomic region. |
-| INTEG = Integrative. |
+ORA = Over-representation analysis. FCS = Functional class scoring.
+PT = Pathway topology based. SS = Single-sample. GR = Genomic region.
+INTEG = Integrative.
 
 *Last updated: Jul.27th, 2021*
