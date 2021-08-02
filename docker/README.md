@@ -27,7 +27,7 @@ The galaxy administrator user is `galaxy` with `galaxy` as password.
    ```shell
    # use wget to download the files
    wget https://github.com/gsa-central/galaxy-gsa/archive/refs/heads/main.zip
-   # unzip main.zip
+   unzip main.zip
    mv galaxy-gsa-main galaxy-gsa 
    ```
 
@@ -50,4 +50,4 @@ The galaxy administrator user is `galaxy` with `galaxy` as password.
 
 The galaxy administrator user is `galaxy` with `galaxy` as password.
 
-*Last updated: July 23rd, 2021*
+*Last updated: August 2nd, 2021*
